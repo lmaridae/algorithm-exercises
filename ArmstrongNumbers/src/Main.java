@@ -16,7 +16,9 @@ public class Main {
 
     public static void main(String[] args) {
         long a = System.currentTimeMillis();
-        System.out.println(Arrays.toString(getNumbers(10_000_000_000L)));
+        var result = getNumbers(100_000_000_000L);
+        System.out.println(Arrays.toString(result));
+        System.out.println("size = " + result.length);
         long b = System.currentTimeMillis();
         System.out.println("memory " + (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / (8 * 128 * 1024));
         System.out.println("time = " + (b - a) / 1000);
@@ -52,15 +54,18 @@ public class Main {
         if (currentValueLength > digitAmount || currentDigits.size() == digitAmount) {
             if (currentValueLength == digitAmount) {
 
-                Set<Integer> digitsInQueue = new HashSet<>(currentDigits);
+                List<Integer> digitsInQueue = new ArrayList<>(currentDigits);
 
-                Set<Integer> digitsInNumber = String.valueOf(currentValue)
+                List<Integer> digitsInNumber = String.valueOf(currentValue)
                         .chars()
                         .map(value -> value - '0')
                         .boxed()
-                        .collect(Collectors.toSet());
+                        .collect(Collectors.toList());
 
-                if (digitsInQueue.equals(digitsInNumber)) {
+                Collections.sort(digitsInQueue);
+                Collections.sort(digitsInNumber);
+
+                if (digitsInNumber.equals(digitsInQueue)) {
                     results.add(currentValue);
                 }
             }
