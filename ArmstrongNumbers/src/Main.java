@@ -9,6 +9,7 @@ public class Main {
     // recursive values
     private static Deque<Integer> currentDigits = new LinkedList<>();
     private static long currentValue;
+    private static boolean is2big;
 
 //    public static void main(String[] args) {
 //        System.out.println(Arrays.toString(getNumbers(1234)));
@@ -16,7 +17,8 @@ public class Main {
 
     public static void main(String[] args) {
         long a = System.currentTimeMillis();
-        var result = getNumbers(100_000_000_000L);
+        System.out.println(Long.MAX_VALUE);
+        var result = getNumbers(Long.MAX_VALUE);
         System.out.println(Arrays.toString(result));
         System.out.println("size = " + result.length);
         long b = System.currentTimeMillis();
@@ -52,6 +54,9 @@ public class Main {
         int lastDigit = currentDigits.peekLast() == null ? 0 : currentDigits.peekLast();
 
         if (currentValueLength > digitAmount || currentDigits.size() == digitAmount) {
+            if (currentValueLength > digitAmount) {
+                is2big = true;
+            }
             if (currentValueLength == digitAmount) {
 
                 List<Integer> digitsInQueue = new ArrayList<>(currentDigits);
@@ -78,6 +83,10 @@ public class Main {
             recursiveSearch(digitAmount);
             currentValue -= digitsPowers.get(i);
             currentDigits.pollLast();
+            if (is2big) {
+                is2big = false;
+                return;
+            }
         }
     }
 
